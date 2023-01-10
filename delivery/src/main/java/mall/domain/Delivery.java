@@ -65,7 +65,7 @@ public class Delivery  {
         DeliveryStarted deliveryStarted = new DeliveryStarted(this);
         deliveryStarted.publishAfterCommit();
 
-
+/* 
 
         DeliveryReturned deliveryReturned = new DeliveryReturned(this);
         deliveryReturned.publishAfterCommit();
@@ -79,8 +79,16 @@ public class Delivery  {
 
         DeliveryCanceled deliveryCanceled = new DeliveryCanceled(this);
         deliveryCanceled.publishAfterCommit();
+        */
 
     }
+
+@PostUpdate
+public void onPostUpdate(){
+    DeliveryCanceled deliveryCanceled = new DeliveryCanceled(this);
+    deliveryCanceled.publishAfterCommit();
+
+}
 
     public static DeliveryRepository repository(){
         DeliveryRepository deliveryRepository = DeliveryApplication.applicationContext.getBean(DeliveryRepository.class);
@@ -92,11 +100,14 @@ public class Delivery  {
 
     public static void startDelivery(OrderPlaced orderPlaced){
 
-        /** Example 1:  new item 
+        /** Example 1:  new item */
         Delivery delivery = new Delivery();
+        delivery.setProductId(orderPlaced.getProductId());
+        delivery.setProductName(orderPlaced.getProductName());
+        delivery.setOrderId(Long.toString(orderPlaced.getId()));
+        delivery.setStatus("DELIVERY STARTED");
         repository().save(delivery);
 
-        */
 
         /** Example 2:  finding and process
         
@@ -119,16 +130,17 @@ public class Delivery  {
 
         */
 
-        /** Example 2:  finding and process
+        /** Example 2:  finding and process*/
         
-        repository().findById(orderCanceled.get???()).ifPresent(delivery->{
-            
-            delivery // do something
+        repository().findByOrderId(Long.toString(orderCanceled.getId())).ifPresent(delivery->{
+            System.out.println("TTTTTTTTTTTT");
+            delivery.setStatus("DELIVERY CANCELED"); // do something
             repository().save(delivery);
 
 
          });
-        */
+        
+        //System.out.println("TTTTTTTTTTTT");
 
         
     }

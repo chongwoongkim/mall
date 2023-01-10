@@ -70,7 +70,8 @@ public class Order  {
         orderPlaced.publishAfterCommit();
 
     }
-    @PostRemove
+    //@PostRemove
+    @PostUpdate
     public void onPostRemove(){
 
 
